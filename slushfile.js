@@ -8,28 +8,41 @@ const inquirer = require('inquirer');
 const npmInstallPackage = require('npm-install-package');
 
 gulp.task('default', function (done) {
-  inquirer.prompt(questions).then(answers => {
     const templates = [
       __dirname + '/templates/**/**'
     ];
 
     gulp
-      .src(templates)
+      .src(templates, { dot: true })
       .pipe(conflict('./'))
       .pipe(gulp.dest('./'))
       .on('end', function () {
-        const devDeps = [
+        const eslintDeps = [
           'eslint',
           'babel-preset-react',
-          'babel-preset-flow',
-          'flow-bin',
           'babel-eslint',
+          'eslint-plugin-react',
           'eslint-plugin-import',
           'eslint-plugin-jsx-a11y',
-          'eslint-plugin-react',
           'eslint-config-airbnb',
+        ];
+
+        // flow
+        const flowDeps = [
+          'babel-preset-flow',
+          'flow-bin'
+        ];
+
+        // prettier
+        const prettierDeps = [
           'prettier-eslint',
           'eslint-config-prettier'
+        ];
+
+        const devDeps = [
+          ...eslintDeps,
+          ...flowDeps,
+          ...prettierDeps
         ];
 
         const installOptions = {
@@ -43,12 +56,14 @@ gulp.task('default', function (done) {
     // adding some flow commands
     gulp.src('./package.json')
       .pipe(jeditor(function(json) {
-        json.dependencies['flow:start'] = "flow start";
-        json.dependencies['flow:stop'] = "flow stop";
-        json.dependencies['flow:status'] = "flow status";
-        json.dependencies['flow:coverage'] = "flow coverage";
+        json.scripts = {
+          ...json.scripts,
+          'flow:start': 'flow start',
+          'flow:stop': 'flow stop',
+          'flow:status': 'flow status',
+          'flow:coverage': 'flow coverage',
+        }
         return json;
       }))
       .pipe(gulp.dest("."));
-  });
 });
