@@ -39,10 +39,17 @@ gulp.task('default', function (done) {
           'eslint-config-prettier'
         ];
 
+        // husky
+        const huskyDeps = [
+          'husky',
+          'lint-staged'
+        ];
+
         const devDeps = [
           ...eslintDeps,
           ...flowDeps,
-          ...prettierDeps
+          ...prettierDeps,
+          ...huskyDeps
         ];
 
         const installOptions = {
@@ -53,7 +60,7 @@ gulp.task('default', function (done) {
         npmInstallPackage(devDeps, installOptions, done);
       });
 
-    // adding some flow commands
+    // adding some commands
     gulp.src('./package.json')
       .pipe(jeditor(function(json) {
         json.scripts = {
@@ -62,6 +69,10 @@ gulp.task('default', function (done) {
           'flow:stop': 'flow stop',
           'flow:status': 'flow status',
           'flow:coverage': 'flow coverage',
+          'precommit': 'lint-staged'
+        }
+        json['lint-staged'] = {
+          "*.{js,jsx,json,css,md}": ["prettier --write", "git add"]
         }
         return json;
       }))
