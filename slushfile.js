@@ -3,6 +3,7 @@
 const gulp = require('gulp');
 const template = require('gulp-template');
 const conflict = require('gulp-conflict');
+const jeditor = require('gulp-json-editor');
 const inquirer = require('inquirer');
 const npmInstallPackage = require('npm-install-package');
 
@@ -38,5 +39,16 @@ gulp.task('default', function (done) {
 
         npmInstallPackage(devDeps, installOptions, done);
       });
+
+    // adding some flow commands
+    gulp.src('./package.json')
+      .pipe(jeditor(function(json) {
+        json.dependencies['flow:start'] = "flow start";
+        json.dependencies['flow:stop'] = "flow stop";
+        json.dependencies['flow:status'] = "flow status";
+        json.dependencies['flow:coverage'] = "flow coverage";
+        return json;
+      }))
+      .pipe(gulp.dest("."));
   });
 });
