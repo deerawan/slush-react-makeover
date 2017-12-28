@@ -14,6 +14,7 @@
   "dependencies": {
     "gulp": "^3.9.1",
     "gulp-conflict": "^0.4.0",
+    "gulp-json-editor": "^2.2.1",
     "gulp-rename": "^1.2.2",
     "gulp-template": "^4.0.0",
     "inquirer": "^4.0.1",

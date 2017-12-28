@@ -19,14 +19,16 @@ gulp.task('default', function (done) {
       .on('end', function () {
         const devDeps = [
           'eslint',
+          'babel-preset-react',
+          'babel-preset-flow',
+          'flow-bin',
           'babel-eslint',
           'eslint-plugin-import',
           'eslint-plugin-jsx-a11y',
           'eslint-plugin-react',
           'eslint-config-airbnb',
-          'flow-bin',
-          'babel-preset-flow',
-          'babel-preset-react'
+          'prettier-eslint',
+          'eslint-config-prettier'
         ];
 
         const installOptions = {
